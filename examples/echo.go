@@ -1,11 +1,10 @@
 package main
 
 import (
+	"github.com/hedahong/kcp-go/v6"
 	"log"
 	"strconv"
 	"time"
-
-	"github.com/hedahong/kcp-go"
 )
 
 func main() {
