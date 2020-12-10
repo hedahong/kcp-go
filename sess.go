@@ -1001,6 +1001,33 @@ func ListenWithOptions(laddr string, block BlockCrypt, dataShards, parityShards 
 	return serveConn(block, dataShards, parityShards, conn, true)
 }
 
+//hedahong add
+func DialWithOptions2(raddr ,bindAddr string, block BlockCrypt, dataShards, parityShards int) (*UDPSession, error) {
+	// network type detection
+	udpaddr, err := net.ResolveUDPAddr("udp", raddr)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+	network := "udp4"
+	if udpaddr.IP.To4() == nil {
+		network = "udp"
+	}
+
+	localUDPAddr,err:=net.ResolveUDPAddr(network, bindAddr)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	conn, err := net.ListenUDP(network, localUDPAddr)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	var convid uint32
+	binary.Read(rand.Reader, binary.LittleEndian, &convid)
+	return newUDPSession(convid, dataShards, parityShards, nil, conn, true, udpaddr, block), nil
+}
+
 // ServeConn serves KCP protocol for a single packet connection.
 func ServeConn(block BlockCrypt, dataShards, parityShards int, conn net.PacketConn) (*Listener, error) {
 	return serveConn(block, dataShards, parityShards, conn, false)
