@@ -1,4 +1,4 @@
-module github.com/hedahong/kcp-go
+module github.com/hedahong/kcp-go/v6
 
 require (
 	github.com/klauspost/cpuid v1.3.1 // indirect
